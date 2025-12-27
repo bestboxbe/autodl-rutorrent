@@ -30,8 +30,8 @@ Help.prototype.createDialogBox =
 function(multiSelectDlgBox, okHandler)
 {
 	theDialogManager.make("autodl-help", theUILang.autodlHelp,
-		'<div id="autodl-help">' +
-			'<div align="center">' +
+		'<div class="autodl-main-layout">' +
+			'<div class="autodl-single-content" style="padding: 20px; text-align: center;">' +
 				'<h2><u>Wiki</u></h2>' +
 				'<p><a href="https://github.com/autodl-community/autodl-irssi/wiki" target="_blank">autodl-irssi</a></p>' +
 				'<p><a href="https://github.com/autodl-community/autodl-rutorrent/wiki" target="_blank">autodl-rutorrent</a></p>' +
@@ -41,8 +41,13 @@ function(multiSelectDlgBox, okHandler)
 				'<p>#autodl-community on irc.p2p-network.net</p>' +
 				'<p><a href="http://widget.mibbit.com/?settings=acc887926984c5c6e62412b13d9fbfbc&server=irc.p2p-network.net&channel=%23autodl-community&nick=autodler%3F%3F" target="_blank">Chat with Mibbit</a></p>' +
 			'</div>' +
+			'<div class="autodl-actions-footer">' +
+				'<input type="button" class="Button" id="autodl-help-close-button" value="' + theUILang.autodlClose + '"></input>' +
+			'</div>' +
 		'</div>'
 	);
+
+	$("#autodl-help-close-button").on('click', function (e) { okHandler() });
 }
 
 Help.prototype.onBeforeShow =

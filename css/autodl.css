@@ -14,20 +14,24 @@
 /* --- Base Layout (Flexbox) --- */
 
 /* 1. Top Level Dialog Window */
+.dlg-window#autodl-ircsrvs,
+.dlg-window#autodl-help,
+.dlg-window#autodl-multiselect {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--autodl-bg);
+}
+
 .dlg-window#autodl-filters,
 .dlg-window#autodl-preferences,
 .dlg-window#autodl-trackers,
 .dlg-window#autodl-servers,
-.dlg-window#autodl-ircsrvs,
-.dlg-window#autodl-help {
-    display: flex;
-    flex-direction: column !important;
-    background-color: var(--autodl-bg);
+.dlg-window#autodl-ircsrvs {
     /* Fix: Constrain modal size */
-    width: 750px !important;
-    height: 550px !important;
-    max-width: 95vw !important;
-    max-height: 95vh !important;
+    width: 750px;
+    height: 550px;
+    max-width: 95vw;
+    max-height: 95vh;
 }
 
 /* 2. Content Container (Inner Div) */
@@ -35,8 +39,8 @@
 /* 2. Content Container (Inner Div) */
 /* Main Wrapper: Flex Column (Header/Grid/Footer) */
 .autodl-main-layout {
-    display: flex !important;
-    flex-direction: column !important;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -44,21 +48,31 @@
 }
 
 /* Grid Content: Flex Row (Left List | Right Details) */
-.autodl-grid-content {
+.autodl-main-layout .autodl-grid-content {
     flex: 1;
-    display: flex !important;
-    flex-direction: row !important;
+    display: flex;
+    flex-direction: row;
     overflow: hidden;
     min-height: 0;
     /* Important for nested scrolling */
     border-bottom: 1px solid var(--autodl-border);
 }
 
+/* Single Content: Flex Column (For Preferences) */
+.autodl-main-layout .autodl-single-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    border-bottom: 1px solid var(--autodl-border);
+}
+
 /* 3. Bottom Buttons (Footer) */
 .autodl-actions-footer {
     flex: 0 0 auto;
-    display: flex !important;
-    flex-direction: row !important;
+    display: flex;
+    flex-direction: row;
     justify-content: flex-end;
     align-items: center;
     padding: 10px;
@@ -69,10 +83,20 @@
 }
 
 /* Legacy support or overrides if needed */
-.dlg-window .dialog-buttons,
-.dlg-window .buttons-list {
+/* Legacy support or overrides if needed */
+.dlg-window#autodl-filters .dialog-buttons,
+.dlg-window#autodl-preferences .dialog-buttons,
+.dlg-window#autodl-trackers .dialog-buttons,
+.dlg-window#autodl-servers .dialog-buttons,
+.dlg-window#autodl-ircsrvs .dialog-buttons,
+.dlg-window#autodl-help .dialog-buttons,
+.dlg-window#autodl-filters .buttons-list,
+.dlg-window#autodl-preferences .buttons-list,
+.dlg-window#autodl-trackers .buttons-list,
+.dlg-window#autodl-servers .buttons-list,
+.dlg-window#autodl-ircsrvs .buttons-list,
+.dlg-window#autodl-help .buttons-list {
     display: none !important;
-    /* Hide legacy buttons if they appear */
 }
 
 /* --- Left/Right Panes (Flex Items) --- */
@@ -144,26 +168,25 @@
 }
 
 /* --- Text & Paragraph Styling --- */
-/* Fix for text overflow */
-.dlg-window p,
+/* Fix for text overflow - scoped to autodl */
 .autodl-main-layout p {
-    white-space: normal !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
     line-height: 1.5;
     margin-bottom: 15px;
     max-width: 100%;
     color: var(--autodl-text);
 }
 
-/* Links inside text */
-.dlg-window p a {
+/* Links inside text - scoped to autodl */
+.autodl-main-layout p a {
     color: var(--autodl-text);
     text-decoration: underline;
 }
 
-/* Fieldset styling */
-fieldset {
+/* Fieldset styling - scoped to autodl */
+.autodl-main-layout fieldset {
     border: 1px solid var(--autodl-border);
     margin: 0 0 10px 0;
     padding: 10px;
@@ -173,7 +196,7 @@ fieldset {
     box-sizing: border-box;
 }
 
-legend {
+.autodl-main-layout legend {
     color: var(--autodl-text);
     padding: 0 5px;
     font-weight: bold;
@@ -247,79 +270,76 @@ div#autodl-tb.nav-icon,
     color: var(--main-text-color, #000);
 }
 
-/* Buttons */
-.Button {
+/* Buttons - scoped to autodl */
+.autodl-main-layout .Button {
     margin: 2px;
 }
 
-/* Inputs & Textboxes */
-input[type="text"],
-input[type="password"],
-select {
+/* Inputs & Textboxes - scoped to autodl */
+.autodl-main-layout input[type="text"],
+.autodl-main-layout input[type="password"],
+.autodl-main-layout select {
     background-color: var(--autodl-input-bg);
     color: var(--autodl-text);
     border: 1px solid var(--autodl-border);
     padding: 2px;
 }
 
-/* Textbox sizing utility classes */
-.textbox-3 {
+/* Textbox sizing utility classes - scoped to autodl */
+.autodl-main-layout .textbox-3 {
     width: 3em;
 }
 
-.textbox-5 {
+.autodl-main-layout .textbox-5 {
     width: 5em;
 }
 
-.textbox-7 {
+.autodl-main-layout .textbox-7 {
     width: 7em;
 }
 
-.textbox-10 {
+.autodl-main-layout .textbox-10 {
     width: 10em;
 }
 
-.textbox-12 {
+.autodl-main-layout .textbox-12 {
     width: 12em;
 }
 
-.textbox-18 {
+.autodl-main-layout .textbox-18 {
     width: 18em;
 }
 
-.textbox-20 {
+.autodl-main-layout .textbox-20 {
     width: 22em;
 }
 
-.textbox-22 {
+.autodl-main-layout .textbox-22 {
     width: 24em;
 }
 
-.textbox-23 {
+.autodl-main-layout .textbox-23 {
     width: 25em;
 }
 
-/* Tabs (Generalized) */
-#autodl-filters-tabs ul.tabbar,
-#autodl-prefs-tabs ul.tabbar {
+/* Tabs (Generalized) - scoped to autodl */
+.autodl-main-layout ul.tabbar {
     display: flex;
     flex-direction: row;
-    list-style: none !important;
+    list-style: none;
     margin: 0;
     padding: 0;
     border-bottom: 1px solid var(--autodl-border);
 }
 
-#autodl-filters-tabs ul.tabbar li,
-#autodl-prefs-tabs ul.tabbar li {
+.autodl-main-layout ul.tabbar li {
     margin: 0;
     padding: 0;
     margin-right: 2px;
     list-style-type: none !important;
 }
 
-#autodl-filters-tabs ul.tabbar li a,
-#autodl-prefs-tabs ul.tabbar li a {
+.autodl-main-layout ul.tabbar li a {
     display: block;
     padding: 5px 10px;
     text-decoration: none;
@@ -331,8 +351,7 @@ select {
     white-space: nowrap;
 }
 
-#autodl-filters-tabs ul.tabbar li.selected a,
-#autodl-prefs-tabs ul.tabbar li.selected a {
+.autodl-main-layout ul.tabbar li.selected a {
     background-color: var(--autodl-hover);
     font-weight: bold;
     border-bottom: 2px solid var(--autodl-hover);
@@ -340,24 +359,187 @@ select {
 
 /* Log View */
 #autodl-irssi-log {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
     font-family: monospace;
     background-color: var(--autodl-input-bg);
     color: var(--autodl-text);
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .autodl-line-time {
     color: #888;
+    padding-right: 5px;
+    white-space: nowrap;
+}
+
+.autodl-line-sep {
+    padding: 0 5px;
+    color: #888;
 }
 
 .autodl-line-text {
+    flex: 1;
     color: var(--autodl-text);
+}
+
+/* IRC log formatting */
+.autodl-bold {
+    font-weight: bold;
+}
+
+.autodl-underline {
+    text-decoration: underline;
+}
+
+.autodl-fg-0 {
+    color: #FFFFFF;
+}
+
+.autodl-fg-1 {
+    color: #000000;
+}
+
+.autodl-fg-2 {
+    color: #0000FF;
+}
+
+.autodl-fg-3 {
+    color: #008000;
+}
+
+.autodl-fg-4 {
+    color: #FF0000;
+}
+
+.autodl-fg-5 {
+    color: #A52A2A;
+}
+
+.autodl-fg-6 {
+    color: #800080;
+}
+
+.autodl-fg-7 {
+    color: #FFA500;
+}
+
+.autodl-fg-8 {
+    color: #8A5C2E;
+}
+
+.autodl-fg-9 {
+    color: #599400;
+}
+
+.autodl-fg-10 {
+    color: #0080FF;
+}
+
+.autodl-fg-11 {
+    color: #6666FF;
+}
+
+.autodl-fg-12 {
+    color: #57AECB;
+}
+
+.autodl-fg-13 {
+    color: #FF4766;
+}
+
+.autodl-fg-14 {
+    color: #808080;
+}
+
+.autodl-fg-15 {
+    color: #ADADAD;
+}
+
+.autodl-bg-0 {
+    background-color: #FFFFFF;
+}
+
+.autodl-bg-1 {
+    background-color: #000000;
+}
+
+.autodl-bg-2 {
+    background-color: #0000FF;
+}
+
+.autodl-bg-3 {
+    background-color: #008000;
+}
+
+.autodl-bg-4 {
+    background-color: #FF0000;
+}
+
+.autodl-bg-5 {
+    background-color: #A52A2A;
+}
+
+.autodl-bg-6 {
+    background-color: #800080;
+}
+
+.autodl-bg-7 {
+    background-color: #FFA500;
+}
+
+.autodl-bg-8 {
+    background-color: #8A5C2E;
+}
+
+.autodl-bg-9 {
+    background-color: #599400;
+}
+
+.autodl-bg-10 {
+    background-color: #0080FF;
+}
+
+.autodl-bg-11 {
+    background-color: #6666FF;
+}
+
+.autodl-bg-12 {
+    background-color: #57AECB;
+}
+
+.autodl-bg-13 {
+    background-color: #FF4766;
+}
+
+.autodl-bg-14 {
+    background-color: #808080;
+}
+
+.autodl-bg-15 {
+    background-color: #ADADAD;
+}
+
+.autodl-fg-as-bg {
+    background-color: var(--autodl-text);
+}
+
+.autodl-bg-as-fg {
+    color: var(--autodl-input-bg);
+}
+
+#autodl-irssi-log tr:hover {
+    background-color: var(--autodl-hover);
 }
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
 
     /* Change grid to column layout on mobile */
-    .autodl-grid-content {
+    .autodl-main-layout .autodl-grid-content {
         flex-direction: column !important;
     }
 
