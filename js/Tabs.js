@@ -107,7 +107,7 @@ function(idTabElem, idContentElem)
 	var obj = TabsBase.prototype.add.call(this, idTabElem, idContentElem);
 
 	var this_ = this;
-	$(obj.tabElem).mousedown(function(e)
+	$(obj.tabElem).on('mousedown', function(e)
 	{
 		this_._setNewSelected(obj);
 	});
@@ -119,7 +119,9 @@ function(obj)
 	if (!obj)
 		return;
 	TabsBase.prototype._makeUnselected.call(this, obj);
+	$(obj.tabElem).removeClass("selected");
 	$(obj.tabElem).parent().removeClass("selected");
+	$(obj.contentElem).removeClass("selected");
 }
 
 Tabs.prototype._makeSelected =
@@ -128,7 +130,9 @@ function(obj)
 	if (!obj)
 		return;
 	TabsBase.prototype._makeSelected.call(this, obj);
+	$(obj.tabElem).addClass("selected");
 	$(obj.tabElem).parent().addClass("selected");
+	$(obj.contentElem).addClass("selected");
 }
 
 // Similar to a tab header except it's using a drop down box
@@ -139,9 +143,9 @@ function DropDownTabs(idSelect)
 	this.selectElem = document.getElementById(idSelect);
 
 	var this_ = this;
-	$(this.selectElem).change(function(e) { this_._onChange(); })
+	$(this.selectElem).on('change', function(e) { this_._onChange(); })
 						// selectedIndex should be updated when we get a keyup event
-					  .keyup(function(e) { this_._onChange(); });
+					  .on('keyup', function(e) { this_._onChange(); });
 }
 DropDownTabs.prototype = new TabsBase();
 DropDownTabs.constructor = DropDownTabs;

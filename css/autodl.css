@@ -1,0 +1,399 @@
+/* Modernized autodl-irssi CSS */
+
+/* --- Variables & Theming --- */
+:root {
+    --autodl-bg: var(--dialog-bg-color, #ffffff);
+    --autodl-text: var(--main-text-color, #000000);
+    --autodl-border: var(--menu-border-color, #ccc);
+    --autodl-input-bg: var(--menu-background-color, #ffffff);
+    --autodl-hover: var(--menu-highlight-background-color, #e0e0e0);
+    --autodl-header-height: 3rem;
+    --autodl-footer-height: 3rem;
+}
+
+/* --- Base Layout (Flexbox) --- */
+
+/* 1. Top Level Dialog Window */
+.dlg-window#autodl-filters,
+.dlg-window#autodl-preferences,
+.dlg-window#autodl-trackers,
+.dlg-window#autodl-servers,
+.dlg-window#autodl-ircsrvs,
+.dlg-window#autodl-help {
+    display: flex;
+    flex-direction: column !important;
+    background-color: var(--autodl-bg);
+    /* Fix: Constrain modal size */
+    width: 750px !important;
+    height: 550px !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+}
+
+/* 2. Content Container (Inner Div) */
+/* Flexbox Row: Left List | Right Content */
+/* 2. Content Container (Inner Div) */
+/* Main Wrapper: Flex Column (Header/Grid/Footer) */
+.autodl-main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--autodl-bg);
+}
+
+/* Grid Content: Flex Row (Left List | Right Details) */
+.autodl-grid-content {
+    flex: 1;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow: hidden;
+    min-height: 0;
+    /* Important for nested scrolling */
+    border-bottom: 1px solid var(--autodl-border);
+}
+
+/* 3. Bottom Buttons (Footer) */
+.autodl-actions-footer {
+    flex: 0 0 auto;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--autodl-bg);
+    border-top: 1px solid var(--autodl-border);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Legacy support or overrides if needed */
+.dlg-window .dialog-buttons,
+.dlg-window .buttons-list {
+    display: none !important;
+    /* Hide legacy buttons if they appear */
+}
+
+/* --- Left/Right Panes (Flex Items) --- */
+#autodl-filters-left,
+#autodl-trackers-left,
+#autodl-ircsrvs-left,
+#autodl-servers-left {
+    flex: 0 0 220px;
+    /* Fixed Width */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-right: 1px solid var(--autodl-border);
+    background-color: var(--autodl-bg);
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#autodl-trackers-right,
+#autodl-ircsrvs-right,
+#autodl-servers-right {
+    flex: 1;
+    /* REST of the space */
+    padding: 15px;
+    overflow-y: auto;
+    background-color: var(--autodl-bg);
+    height: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Fix for Filters Tab Layout */
+#autodl-filters-right {
+    flex: 1;
+    /* Added to ensure it fills the space */
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    /* Restore missing props from shared rule */
+    background-color: var(--autodl-bg);
+    height: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+#autodl-filters-tabs {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+#autodl-filters-contents {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/* Preferences Specific Areas */
+#autodl-prefs-tabs {
+    flex: 0 0 auto;
+    background-color: var(--autodl-bg);
+}
+
+#autodl-prefs-contents {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* --- Text & Paragraph Styling --- */
+/* Fix for text overflow */
+.dlg-window p,
+.autodl-main-layout p {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    max-width: 100%;
+    color: var(--autodl-text);
+}
+
+/* Links inside text */
+.dlg-window p a {
+    color: var(--autodl-text);
+    text-decoration: underline;
+}
+
+/* Fieldset styling */
+fieldset {
+    border: 1px solid var(--autodl-border);
+    margin: 0 0 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+legend {
+    color: var(--autodl-text);
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+/* --- Components --- */
+
+/* ListBoxes */
+#autodl-filters-list,
+#autodl-trackers-list,
+#autodl-ircsrvs-list,
+#autodl-servers-list {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--autodl-border);
+    background-color: var(--autodl-input-bg);
+    overflow-y: auto;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+/* IRC Servers Buttons */
+#autodl-ircsrvs-list-buttons,
+#autodl-filters-list-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+#autodl-ircsrvs-list-buttons>div,
+#autodl-filters-list-buttons>div {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* --- Toolbar Icon --- */
+/* Pointing to the correct image in ../img/ */
+#autodl-tb,
+div#autodl-tb.nav-icon,
+.nav-icon.autodl-tb-icon {
+    background-image: url('../img/prefs_std.gif') !important;
+    /* FIXED PATH */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* List Item Styling */
+.autodl-listbox-item {
+    padding: 2px 5px;
+    cursor: default;
+    color: var(--autodl-text);
+}
+
+.autodl-listbox-item:hover {
+    background-color: var(--autodl-hover);
+}
+
+.autodl-listbox-item-selected {
+    background-color: var(--menu-highlight-background-color, #bedbf4);
+    color: var(--main-text-color, #000);
+}
+
+/* Buttons */
+.Button {
+    margin: 2px;
+}
+
+/* Inputs & Textboxes */
+input[type="text"],
+input[type="password"],
+select {
+    background-color: var(--autodl-input-bg);
+    color: var(--autodl-text);
+    border: 1px solid var(--autodl-border);
+    padding: 2px;
+}
+
+/* Textbox sizing utility classes */
+.textbox-3 {
+    width: 3em;
+}
+
+.textbox-5 {
+    width: 5em;
+}
+
+.textbox-7 {
+    width: 7em;
+}
+
+.textbox-10 {
+    width: 10em;
+}
+
+.textbox-12 {
+    width: 12em;
+}
+
+.textbox-18 {
+    width: 18em;
+}
+
+.textbox-20 {
+    width: 22em;
+}
+
+.textbox-22 {
+    width: 24em;
+}
+
+.textbox-23 {
+    width: 25em;
+}
+
+/* Tabs (Generalized) */
+#autodl-filters-tabs ul.tabbar,
+#autodl-prefs-tabs ul.tabbar {
+    display: flex;
+    flex-direction: row;
+    list-style: none !important;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--autodl-border);
+}
+
+#autodl-filters-tabs ul.tabbar li,
+#autodl-prefs-tabs ul.tabbar li {
+    margin: 0;
+    padding: 0;
+    margin-right: 2px;
+    list-style-type: none !important;
+}
+
+#autodl-filters-tabs ul.tabbar li a,
+#autodl-prefs-tabs ul.tabbar li a {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: var(--autodl-bg);
+    border: 1px solid var(--autodl-border);
+    border-bottom: none;
+    color: var(--autodl-text);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#autodl-filters-tabs ul.tabbar li.selected a,
+#autodl-prefs-tabs ul.tabbar li.selected a {
+    background-color: var(--autodl-hover);
+    font-weight: bold;
+    border-bottom: 2px solid var(--autodl-hover);
+}
+
+/* Log View */
+#autodl-irssi-log {
+    font-family: monospace;
+    background-color: var(--autodl-input-bg);
+    color: var(--autodl-text);
+}
+
+.autodl-line-time {
+    color: #888;
+}
+
+.autodl-line-text {
+    color: var(--autodl-text);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+
+    /* Change grid to column layout on mobile */
+    .autodl-grid-content {
+        flex-direction: column !important;
+    }
+
+    /* Left panels: reduce height, full width */
+    #autodl-filters-left,
+    #autodl-trackers-left,
+    #autodl-ircsrvs-left,
+    #autodl-servers-left {
+        flex: 0 0 auto;
+        border-right: none;
+        border-bottom: 1px solid var(--autodl-border);
+        height: 200px;
+        width: 100%;
+    }
+
+    /* Right panels: ensure they're visible and scrollable */
+    #autodl-filters-right,
+    #autodl-trackers-right,
+    #autodl-ircsrvs-right,
+    #autodl-servers-right {
+        flex: 1;
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+    }
+
+    /* Enable horizontal scrolling for tabs on mobile */
+    #autodl-filters-tabs,
+    #autodl-prefs-tabs {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    #autodl-filters-tabs ul.tabbar,
+    #autodl-prefs-tabs ul.tabbar {
+        flex-wrap: nowrap;
+        min-width: min-content;
+    }
+}

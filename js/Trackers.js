@@ -22,340 +22,301 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-function Trackers()
-{
+function Trackers() {
 }
 
 Trackers.prototype.createDialogBox =
-function(multiSelectDlgBox, okHandler)
-{
-	theDialogManager.make("autodl-trackers", theUILang.autodlTrackers,
-		'<div id="autodl-trackers">' +
+	function (multiSelectDlgBox, okHandler) {
+		theDialogManager.make("autodl-trackers", theUILang.autodlTrackers,
+			'<div class="autodl-main-layout">' +
+			'<div class="autodl-grid-content">' +
 			'<div id="autodl-trackers-left">' +
-				'<div id="autodl-trackers-list" />' +
+			'<div id="autodl-trackers-list"></div>' +
 			'</div>' +
-			'<div id="autodl-trackers-right" />' +
-			'<div class="aright buttons-list dialog-buttons">' +
-				'<input type="button" id="autodl-trackers-ok-button" value="' + theUILang.ok + '" class="OK Button" />' +
-				'<input type="button" value="' + theUILang.Cancel + '" class="Cancel Button" />' +
+			'<div id="autodl-trackers-right"></div>' +
 			'</div>' +
-		'</div>'
-	);
+			'<div class="autodl-actions-footer">' +
+			'<input type="button" id="autodl-trackers-ok-button" value="' + theUILang.ok + '" class="OK Button"></input>' +
+			'<input type="button" value="' + theUILang.Cancel + '" class="Cancel Button"></input>' +
+			'</div>' +
+			'</div>'
+		);
 
-	var this_ = this;
+		var this_ = this;
 
-	this.trackerListBox = new ListBox("autodl-trackers-list");
-	this.trackerListBox.onSelected = function(oldObj, newObj) { this_._onTrackerSelected(oldObj, newObj); }
+		this.trackerListBox = new ListBox("autodl-trackers-list");
+		this.trackerListBox.onSelected = function (oldObj, newObj) { this_._onTrackerSelected(oldObj, newObj); }
 
-	$("#autodl-trackers-ok-button").click(function(e) { okHandler() });
-}
+		$("#autodl-trackers-ok-button").on('click', function (e) { okHandler() });
+	}
 
 Trackers.prototype._getSortedTrackerInfos =
-function(trackerInfos)
-{
-	var ary = [];
+	function (trackerInfos) {
+		var ary = [];
 
-	for (var i = 0; i < trackerInfos.length; i++)
-		ary[i] = trackerInfos[i];
-	ary.sort(function(a, b)
-	{
-		return stringCompare(a.longName.toLowerCase(), b.longName.toLowerCase());
-	});
+		for (var i = 0; i < trackerInfos.length; i++)
+			ary[i] = trackerInfos[i];
+		ary.sort(function (a, b) {
+			return stringCompare(a.longName.toLowerCase(), b.longName.toLowerCase());
+		});
 
-	return ary;
-}
+		return ary;
+	}
 
 Trackers.prototype.onBeforeShow =
-function(configFile, trackerInfos, trackersId)
-{
-	this.configFile = configFile;
+	function (configFile, trackerInfos, trackersId) {
+		this.configFile = configFile;
 
-	if (trackersId !== this.trackersId)
-	{
-		this.trackerInfos = this._getSortedTrackerInfos(trackerInfos);
-		this._createListbox();
-		this._createContents();
-		this._createOptions();
-		this.trackerListBox.select(0);
-		this.trackersId = trackersId;
+		if (trackersId !== this.trackersId) {
+			this.trackerInfos = this._getSortedTrackerInfos(trackerInfos);
+			this._createListbox();
+			this._createContents();
+			this._createOptions();
+			this.trackerListBox.select(0);
+			this.trackersId = trackersId;
+		}
+
+		this._initDialog();
 	}
-
-	this._initDialog();
-}
 
 Trackers.prototype.onAfterHide =
-function()
-{
-	this.configFile = null;
-}
+	function () {
+		this.configFile = null;
+	}
 
 Trackers.prototype.onOkClicked =
-function()
-{
-	this._saveTrackers();
+	function () {
+		this._saveTrackers();
 
-	return true;	// autodl.cfg updated
-}
+		return true;	// autodl.cfg updated
+	}
 
 Trackers.prototype._saveTrackers =
-function()
-{
-	for (var i = 0; i < this.trackerInfos.length; i++)
-	{
-		var trackerInfo = this.trackerInfos[i];
+	function () {
+		for (var i = 0; i < this.trackerInfos.length; i++) {
+			var trackerInfo = this.trackerInfos[i];
 
-		var section = this.configFile.getSection("tracker", trackerInfo.type);
-		section.dontPrintEmpty();
+			var section = this.configFile.getSection("tracker", trackerInfo.type);
+			section.dontPrintEmpty();
 
-		var options = this.trackerOptions[trackerInfo.type];
-		saveDialogOptions(section, options);
+			var options = this.trackerOptions[trackerInfo.type];
+			saveDialogOptions(section, options);
+		}
 	}
-}
 
 Trackers.prototype._initDialog =
-function()
-{
-	for (var i = 0; i < this.trackerInfos.length; i++)
-	{
-		var trackerInfo = this.trackerInfos[i];
+	function () {
+		for (var i = 0; i < this.trackerInfos.length; i++) {
+			var trackerInfo = this.trackerInfos[i];
 
-		var section = this.configFile.getSection("tracker", trackerInfo.type);
-		var options = this.trackerOptions[trackerInfo.type];
-		initDialogOptions(section, options);
+			var section = this.configFile.getSection("tracker", trackerInfo.type);
+			var options = this.trackerOptions[trackerInfo.type];
+			initDialogOptions(section, options);
+		}
 	}
-}
 
 Trackers.prototype._createOptions =
-function()
-{
-	this.trackerOptions = {};
-	for (var i = 0; i < this.trackerInfos.length; i++)
-	{
-		var trackerInfo = this.trackerInfos[i];
+	function () {
+		this.trackerOptions = {};
+		for (var i = 0; i < this.trackerInfos.length; i++) {
+			var trackerInfo = this.trackerInfos[i];
 
-		var options = this.trackerOptions[trackerInfo.type] = [];
-		var settings = trackerInfo.settings;
-		for (var j = 0; j < settings.length; j++)
-		{
-			var setting = settings[j];
-			var id = this._settingIdFromName(trackerInfo, setting.name);
-			switch (setting.type)
-			{
-			case "bool":
-				options.push(new DialogOptionBool(id, setting.name, setting.defaultValue));
-				break;
+			var options = this.trackerOptions[trackerInfo.type] = [];
+			var settings = trackerInfo.settings;
+			for (var j = 0; j < settings.length; j++) {
+				var setting = settings[j];
+				var id = this._settingIdFromName(trackerInfo, setting.name);
+				switch (setting.type) {
+					case "bool":
+						options.push(new DialogOptionBool(id, setting.name, setting.defaultValue));
+						break;
 
-			case "integer":
-				options.push(new DialogOptionInt(id, setting.name, setting.defaultValue));
-				break;
+					case "integer":
+						options.push(new DialogOptionInt(id, setting.name, setting.defaultValue));
+						break;
 
-			case "textbox":
-				options.push(new DialogOptionText(id, setting.name, setting.defaultValue));
-				break;
+					case "textbox":
+						options.push(new DialogOptionText(id, setting.name, setting.defaultValue));
+						break;
 
-			case "description":
-				break;
+					case "description":
+						break;
 
-			default:
-				log("Unknown type: " + setting.type);
-				break;
+					default:
+						log("Unknown type: " + setting.type);
+						break;
+				}
 			}
 		}
 	}
-}
 
 Trackers.prototype._createListbox =
-function()
-{
-	this.trackerListBox.removeAll();
-	for (var i = 0; i < this.trackerInfos.length; i++)
-	{
-		var trackerInfo = this.trackerInfos[i];
+	function () {
+		this.trackerListBox.removeAll();
+		for (var i = 0; i < this.trackerInfos.length; i++) {
+			var trackerInfo = this.trackerInfos[i];
 
-		var obj =
-		{
-			trackerInfo: trackerInfo
-		};
-		var checkboxId = this._settingIdFromName(trackerInfo, "enabled");
-		obj.checkboxElem = $('<input type="checkbox" />').attr("id", checkboxId)[0];
-		obj.labelElem = $('<label />').text(trackerInfo.longName)[0];
+			var obj =
+			{
+				trackerInfo: trackerInfo
+			};
+			var checkboxId = this._settingIdFromName(trackerInfo, "enabled");
+			obj.checkboxElem = $('<input type="checkbox"></input>').attr("id", checkboxId)[0];
+			obj.labelElem = $('<label></label>').text(trackerInfo.longName)[0];
 
-		this.trackerListBox.append($(obj.checkboxElem).add(obj.labelElem), obj);
+			this.trackerListBox.append($(obj.checkboxElem).add(obj.labelElem), obj);
+		}
 	}
-}
 
 Trackers.prototype._createContents =
-function()
-{
-	$("#autodl-trackers-right").empty();
-	for (var i = 0; i < this.trackerInfos.length; i++)
-	{
-		var elem = this._createTrackerContent(this.trackerInfos[i]);
-		elem.css("display", "none");
-		$("#autodl-trackers-right").append(elem);
+	function () {
+		$("#autodl-trackers-right").empty();
+		for (var i = 0; i < this.trackerInfos.length; i++) {
+			var elem = this._createTrackerContent(this.trackerInfos[i]);
+			elem.css("display", "none");
+			$("#autodl-trackers-right").append(elem);
+		}
 	}
-}
 
 Trackers.prototype._id =
-function(trackerInfo)
-{
-	var type = trackerInfo.type.replace(/[^\w\-]/, "_");
-	return "autodl-trackers-content-" + type;
-}
+	function (trackerInfo) {
+		var type = trackerInfo.type.replace(/[^\w\-]/, "_");
+		return "autodl-trackers-content-" + type;
+	}
 
 Trackers.prototype._settingIdFromName =
-function(trackerInfo, name)
-{
-	return this._id(trackerInfo) + "-" + name;
-}
+	function (trackerInfo, name) {
+		return this._id(trackerInfo) + "-" + name;
+	}
 
 Trackers.prototype._onTrackerSelected =
-function(oldObj, newObj)
-{
-	if (oldObj)
-		$("#" + this._id(oldObj.trackerInfo)).css("display", "none");
-	if (newObj)
-		$("#" + this._id(newObj.trackerInfo)).css("display", "block");
-}
+	function (oldObj, newObj) {
+		if (oldObj)
+			$("#" + this._id(oldObj.trackerInfo)).css("display", "none");
+		if (newObj)
+			$("#" + this._id(newObj.trackerInfo)).css("display", "block");
+	}
 
 Trackers.prototype._createTrackerContent =
-function(trackerInfo)
-{
-	var div = $("<div />").attr("id", this._id(trackerInfo));
+	function (trackerInfo) {
+		var div = $("<div></div>").attr("id", this._id(trackerInfo));
 
-	var settings = trackerInfo.settings;
-	var tbody = null;
-	for (var i = 0; i < settings.length; i++)
-	{
-		var setting = settings[i];
+		var settings = trackerInfo.settings;
+		var tbody = null;
+		for (var i = 0; i < settings.length; i++) {
+			var setting = settings[i];
 
-		// This is the listbox item checkbox so no need to display it here again
-		if (setting.name === "enabled")
-			continue;
+			// This is the listbox item checkbox so no need to display it here again
+			if (setting.name === "enabled")
+				continue;
 
-		var elem = this._createTrackerSettingsElem(setting, trackerInfo);
+			var elem = this._createTrackerSettingsElem(setting, trackerInfo);
 
-		if (setting.type === "textbox" || setting.type === "integer")
-		{
-			elem = $('<tr />').append($('<td />').append(elem[0]))
-							.append($('<td />').append(elem[1]));
+			if (setting.type === "textbox" || setting.type === "integer") {
+				elem = $('<tr></tr>').append($('<td></td>').append(elem[0]))
+					.append($('<td></td>').append(elem[1]));
 
-			if (tbody == null)
-			{
-				tbody = $('<tbody />');
-				div.append($('<br /><table />').append(tbody));
+				if (tbody == null) {
+					tbody = $('<tbody></tbody>');
+					div.append($('<br></br><table></table>').append(tbody));
+				}
+				tbody.append(elem);
 			}
-			tbody.append(elem);
+			else {
+				elem = $('<div></div>').append(elem);
+				div.append(elem);
+			}
 		}
-		else
-		{
-			elem = $('<div />').append(elem);
-			div.append(elem);
-		}
-	}
 
-	return div;
-}
+		return div;
+	}
 
 Trackers.prototype._createTrackerSettingsElem =
-function(setting, trackerInfo)
-{
-	var id = this._settingIdFromName(trackerInfo, setting.name);
-	var tooltipText = setting.tooltiptext;
+	function (setting, trackerInfo) {
+		var id = this._settingIdFromName(trackerInfo, setting.name);
+		var tooltipText = setting.tooltiptext;
 
-	switch (setting.type)
-	{
-	case "bool":
-		var checkbox = $('<input type="checkbox" />').attr("id", id).attr("title", tooltipText);
-		var label = $('<label />').attr("for", id).text(setting.text).attr("title", tooltipText);
-		return checkbox.add(label);
+		switch (setting.type) {
+			case "bool":
+				var checkbox = $('<input type="checkbox"></input>').attr("id", id).attr("title", tooltipText);
+				var label = $('<label></label>').attr("for", id).text(setting.text).attr("title", tooltipText);
+				return checkbox.add(label);
 
-	case "textbox":
-	case "integer":
-		var label = $('<label />').attr("for", id).text(setting.text);
-		var textbox = $('<input type="text" class="textbox-22" />')
-							.attr("id", id)
-							.attr("title", tooltipText)
-							.attr("placeholder", setting.placeholder || "");
-		if (setting.pasteRegex && setting.pasteGroup)
-		{
-			var this_ = this;
-			textbox.change(function(e)
-			{
-				this_._onPaste(trackerInfo, setting.pasteGroup, textbox);
-			});
-			textbox.keyup(function(e)
-			{
-				this_._onPaste(trackerInfo, setting.pasteGroup, textbox);
-			});
-			textbox.on('input', function(e)
-			{
-				this_._onPaste(trackerInfo, setting.pasteGroup, textbox);
-			});
+			case "textbox":
+			case "integer":
+				var label = $('<label></label>').attr("for", id).text(setting.text);
+				var textbox = $('<input type="text" class="textbox-22"></input>')
+					.attr("id", id)
+					.attr("title", tooltipText)
+					.attr("placeholder", setting.placeholder || "");
+				if (setting.pasteRegex && setting.pasteGroup) {
+					var this_ = this;
+					textbox.on('change', function (e) {
+						this_._onPaste(trackerInfo, setting.pasteGroup, textbox);
+					});
+					textbox.on('keyup', function (e) {
+						this_._onPaste(trackerInfo, setting.pasteGroup, textbox);
+					});
+					textbox.on('input', function (e) {
+						this_._onPaste(trackerInfo, setting.pasteGroup, textbox);
+					});
+				}
+				return label.add(textbox);
+
+			case "description":
+				return this._addHtmlLinks(setting.text);
+
+			default:
+				log("Unknown tracker setting: " + setting.type);
+				return $();
 		}
-		return label.add(textbox);
-
-	case "description":
-		return this._addHtmlLinks(setting.text);
-
-	default:
-		log("Unknown tracker setting: " + setting.type);
-		return $();
 	}
-}
 
 Trackers.prototype._addHtmlLinks =
-function(text)
-{
-	// Fix for IE8, it doesn't support using parens in split to extract the links.
-	var foundLink = false;
-	var ary = text.split(/((?:javascript|https?)\S+)/);
-	var res = "";
-	for (var i = 0; i < ary.length; i++)
-	{
-		var s = ary[i];
-		if (s.match(/^(?:javascript|https?)/))
-		{
-			foundLink = true;
-			res += '<a href="' + s + '" target="_blank">' + s + '</a>';
+	function (text) {
+		// Fix for IE8, it doesn't support using parens in split to extract the links.
+		var foundLink = false;
+		var ary = text.split(/((?:javascript|https?)\S+)/);
+		var res = "";
+		for (var i = 0; i < ary.length; i++) {
+			var s = ary[i];
+			if (s.match(/^(?:javascript|https?)/)) {
+				foundLink = true;
+				res += '<a href="' + s + '" target="_blank">' + s + '</a>';
+			}
+			else
+				res += s;
 		}
-		else
-			res += s;
+		if (!foundLink)
+			res = text;
+		res = "<p>" + res + "</p>";
+		return $(res);
 	}
-	if (!foundLink)
-		res = text;
-	res = "<p>" + res + "</p>";
-	return $(res);
-}
 
 Trackers.prototype._findSetting =
-function(trackerInfo, name)
-{
-	for (var i = 0; i < trackerInfo.settings.length; i++)
-	{
-		var setting = trackerInfo.settings[i];
-		if (setting.name === name)
-			return setting;
-	}
+	function (trackerInfo, name) {
+		for (var i = 0; i < trackerInfo.settings.length; i++) {
+			var setting = trackerInfo.settings[i];
+			if (setting.name === name)
+				return setting;
+		}
 
-	return null;
-}
+		return null;
+	}
 
 Trackers.prototype._onPaste =
-function(trackerInfo, pasteGroup, textboxElem)
-{
-	var s = textboxElem.val();
-	var names = pasteGroup.split(",");
-	for (var i = 0; i < names.length; i++)
-	{
-		var name = $.trim(names[i]);
-		var setting = this._findSetting(trackerInfo, name);
-		if (!setting)
-			continue;
+	function (trackerInfo, pasteGroup, textboxElem) {
+		var s = textboxElem.val();
+		var names = pasteGroup.split(",");
+		for (var i = 0; i < names.length; i++) {
+			var name = $.trim(names[i]);
+			var setting = this._findSetting(trackerInfo, name);
+			if (!setting)
+				continue;
 
-		var textbox = $("#" + this._settingIdFromName(trackerInfo, name));
-		var ary = s.match(setting.pasteRegex);
-		if (textbox.length > 0 && ary && ary.length > 1)
-			textbox.val(ary[1]);
+			var textbox = $("#" + this._settingIdFromName(trackerInfo, name));
+			var ary = s.match(setting.pasteRegex);
+			if (textbox.length > 0 && ary && ary.length > 1)
+				textbox.val(ary[1]);
+		}
 	}
-}
